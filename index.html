@@ -406,7 +406,7 @@
   <div class="indorama-title">INDORAMA</div>
   <div class="wood-sign">
     <div class="fg-line">FAMILY GATHERING 2026</div>
-    <div class="sub-line">UNDIAN DOOR PRIZE</div>
+    <div class="sub-line">UNDIAN DOOR PRIZE &middot; NOMOR 001&ndash;250</div>
   </div>
 </div>
 
@@ -581,6 +581,9 @@
     document.getElementById('modalContainer').innerHTML = '';
   }
 
+  const MIN_PESERTA = 1;
+  const MAX_PESERTA = 250;
+
   function secureRandomDigit(min, max) {
     const range = max - min + 1;
     const arr = new Uint32Array(1);
@@ -588,16 +591,24 @@
     return min + (arr[0] % range);
   }
 
-  function randomDigitForReel(index) {
-    if (index === 0) return secureRandomDigit(0, 3);
-    return secureRandomDigit(0, 9);
+  function secureRandomInt(min, max) {
+    const range = max - min + 1;
+    const arr = new Uint32Array(1);
+    let val;
+    const limit = Math.floor(0xFFFFFFFF / range) * range;
+    do {
+      crypto.getRandomValues(arr);
+      val = arr[0];
+    } while (val >= limit);
+    return min + (val % range);
   }
 
-  function generateUniqueCombo() {
+  function generateUniqueNumber() {
     let attempt;
     let guard = 0;
     do {
-      attempt = [randomDigitForReel(0), randomDigitForReel(1), randomDigitForReel(2)].join('');
+      const n = secureRandomInt(MIN_PESERTA, MAX_PESERTA);
+      attempt = String(n).padStart(3, '0');
       guard++;
     } while (isDuplicate(attempt) && guard < 5000);
     return attempt;
@@ -649,15 +660,13 @@
     remainingMs = TOTAL_MS;
     resultBox.innerHTML = '';
     spinIntervals = [];
-    targetCombo = generateUniqueCombo();
+    targetCombo = generateUniqueNumber();
 
     for (let i = 0; i < NUM_REELS; i++) {
       reelEls[i].classList.remove('locked');
       reelEls[i].classList.add('spinning');
-      const min = 0;
-      const max = i === 0 ? 3 : 9;
       const interval = setInterval(() => {
-        reelEls[i].textContent = secureRandomDigit(min, max);
+        reelEls[i].textContent = secureRandomDigit(0, 9);
         playTick();
       }, 55 + i * 4);
       spinIntervals.push(interval);
