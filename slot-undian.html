@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indorama Family Gathering 2026 - Undian</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4a5a9e 0%, #5c6bb5 50%, #7a9c5e 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #2b2418;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .title-wrap {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .indorama-title {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #ffd54a;
+    text-shadow: 2px 3px 0 rgba(0,0,0,0.25);
+    -webkit-text-stroke: 1.5px #3a2a10;
+    transform: perspective(300px) rotateX(4deg);
+    margin-bottom: 10px;
+  }
+
+  .wood-sign {
+    display: inline-block;
+    background: linear-gradient(180deg, #a9713f 0%, #8a5a30 50%, #a9713f 100%);
+    border: 3px solid #5c3d1e;
+    border-radius: 6px;
+    padding: 12px 32px;
+    box-shadow: 0 6px 0 #5c3d1e, 0 10px 18px rgba(0,0,0,0.35);
+    position: relative;
+  }
+
+  .wood-sign::before,
+  .wood-sign::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background: #3a2410;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .wood-sign::before { left: 8px; }
+  .wood-sign::after { right: 8px; }
+
+  .wood-sign .fg-line {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fdf6e3;
+    text-shadow: 1px 2px 2px rgba(0,0,0,0.3);
+  }
+
+  .wood-sign .sub-line {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #f2e4bc;
+    margin-top: 2px;
+  }
+
+  .machine {
+    background: linear-gradient(180deg, #fdf6e3 0%, #f2e4bc 100%);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 0 0 3px #5c3d1e, 0 0 40px rgba(0,0,0,0.25), 0 20px 50px rgba(0,0,0,0.3);
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timer {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    color: #b5471e;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    font-variant-numeric: tabular-nums;
+    text-shadow: none;
+  }
+
+  .timer.warning { color: #8a2818; text-shadow: none; }
+
+  .reels {
+    display: flex;
+    gap: 16px;
+    background: #2d3a5c;
+    border-radius: 12px;
+    padding: 22px 16px;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.4);
+    justify-content: center;
+  }
+
+  .reel {
+    width: 110px;
+    height: 150px;
+    background: linear-gradient(180deg, #fdf6e3 0%, #f2e4bc 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 76px;
+    font-weight: 700;
+    color: #2b2418;
+    box-shadow: inset 0 0 0 2px #a9713f, 0 2px 6px rgba(0,0,0,0.4);
+    overflow: hidden;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .reel.spinning {
+    box-shadow: inset 0 0 0 2px #ffd54a, 0 0 16px rgba(255,213,74,0.6);
+    animation: pulseSpin 0.15s linear infinite;
+  }
+
+  .reel.locked {
+    box-shadow: inset 0 0 0 3px #7a9c5e, 0 0 18px rgba(122,156,94,0.6);
+    animation: lockPop 0.35s ease;
+  }
+
+  @keyframes pulseSpin {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.08); }
+  }
+
+  @keyframes lockPop {
+    0% { transform: scale(1.15); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 13px 24px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.15s ease;
+    text-transform: uppercase;
+  }
+
+  button:active { transform: scale(0.96); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  #startBtn {
+    background: linear-gradient(180deg, #ffe082 0%, #ffc933 100%);
+    color: #5c3d1e;
+    box-shadow: 0 4px 0 #b8901f;
+  }
+
+  #stopOneBtn {
+    background: linear-gradient(180deg, #5c6bb5 0%, #4a5a9e 100%);
+    color: #fdf6e3;
+    box-shadow: 0 4px 0 #2d3a5c;
+  }
+
+  #stopAllBtn {
+    background: linear-gradient(180deg, #8fb56e 0%, #7a9c5e 100%);
+    color: #fdf6e3;
+    box-shadow: 0 4px 0 #4a5a30;
+  }
+
+  #resetBtn {
+    background: linear-gradient(180deg, #a9713f 0%, #8a5a30 100%);
+    color: #fdf6e3;
+    box-shadow: 0 4px 0 #5c3d1e;
+  }
+
+  button:hover:not(:disabled) { filter: brightness(1.08); }
+
+  .status {
+    font-size: 13px;
+    color: #5c6bb5;
+    letter-spacing: 1px;
+    min-height: 18px;
+    text-align: center;
+  }
+
+  .result-box { text-align: center; min-height: 30px; }
+
+  .result-box .final {
+    font-size: 20px;
+    color: #7a9c5e;
+    letter-spacing: 4px;
+    font-weight: 700;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .history {
+    margin-top: 24px;
+    width: 100%;
+  }
+
+  .history h3 {
+    font-size: 15px;
+    color: #4a5a9e;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 4px;
+  }
+
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(74,90,158,0.08);
+    border: 2px solid rgba(122,156,94,0.5);
+    border-radius: 10px;
+    padding: 10px 10px 10px 18px;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: #4a5a9e;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .history-item .del-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: #8a7a5f;
+    font-size: 20px;
+    padding: 0 6px;
+    line-height: 1;
+    cursor: pointer;
+    letter-spacing: 0;
+  }
+
+  .history-item .del-btn:hover { color: #b5471e; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(45,58,92,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .modal-box {
+    background: #fdf6e3;
+    border: 1px solid rgba(169,113,63,0.5);
+    border-radius: 14px;
+    padding: 24px 28px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  }
+
+  .modal-box p {
+    font-size: 15px;
+    color: #2b2418;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .modal-box .modal-number {
+    color: #b5471e;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  .modal-btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .modal-btn-row button {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  #modalConfirmBtn {
+    background: linear-gradient(180deg, #d9603a 0%, #b5471e 100%);
+    color: #fdf6e3;
+    box-shadow: 0 3px 0 #7a2f12;
+  }
+
+  #modalCancelBtn {
+    background: linear-gradient(180deg, #a9713f 0%, #8a5a30 100%);
+    color: #fdf6e3;
+    box-shadow: 0 3px 0 #5c3d1e;
+  }
+
+  .history-empty {
+    font-size: 12px;
+    color: #8a7a5f;
+    text-align: center;
+  }
+
+  .clear-history {
+    display: block;
+    margin: 10px auto 0;
+    font-size: 11px;
+    padding: 6px 14px;
+    background: transparent;
+    color: #4a5a9e;
+    box-shadow: none;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 500px) {
+    .reel { width: 78px; height: 108px; font-size: 52px; }
+    .reels { gap: 10px; padding: 16px 10px; }
+    .indorama-title { font-size: 28px; letter-spacing: 2px; }
+    .wood-sign .fg-line { font-size: 18px; }
+    .wood-sign { padding: 10px 20px; }
+    .timer { font-size: 32px; }
+    button { padding: 11px 16px; font-size: 13px; }
+    .history-item { font-size: 18px; letter-spacing: 2px; padding: 8px 8px 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="bg-scene" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="500" fill="#4a5a9e"/>
+  <rect x="0" y="480" width="1200" height="320" fill="#7a9c5e"/>
+  <g fill="#ffffff" opacity="0.7">
+    <circle cx="80" cy="60" r="2"/><circle cx="150" cy="120" r="1.5"/><circle cx="220" cy="50" r="2"/>
+    <circle cx="320" cy="90" r="1.5"/><circle cx="420" cy="40" r="2"/><circle cx="500" cy="110" r="1.5"/>
+    <circle cx="600" cy="60" r="2"/><circle cx="700" cy="130" r="1.5"/><circle cx="800" cy="50" r="2"/>
+    <circle cx="900" cy="100" r="1.5"/><circle cx="1000" cy="70" r="2"/><circle cx="1100" cy="120" r="1.5"/>
+    <circle cx="1150" cy="40" r="2"/><circle cx="60" cy="200" r="1.5"/><circle cx="1140" cy="220" r="1.5"/>
+  </g>
+  <g fill="#ffffff" opacity="0.85">
+    <path d="M40 150 L55 145 L70 152 L58 155 L62 165 L48 158 L42 165 L44 153 Z"/>
+    <path d="M110 110 L125 105 L140 112 L128 115 L132 125 L118 118 L112 125 L114 113 Z"/>
+    <path d="M180 160 L195 155 L210 162 L198 165 L202 175 L188 168 L182 175 L184 163 Z"/>
+  </g>
+  <polygon points="0,560 250,470 500,560" fill="#5c7a4a" opacity="0.5"/>
+  <polygon points="700,560 950,460 1200,560" fill="#5c7a4a" opacity="0.5"/>
+</svg>
+
+<div class="title-wrap">
+  <div class="indorama-title">INDORAMA</div>
+  <div class="wood-sign">
+    <div class="fg-line">FAMILY GATHERING 2026</div>
+    <div class="sub-line">UNDIAN DOOR PRIZE</div>
+  </div>
+</div>
+
+<div class="machine">
+  <div class="timer" id="timer">00:30</div>
+
+  <div class="reels" id="reels"></div>
+
+  <div class="controls">
+    <div class="btn-row">
+      <button id="startBtn">Mulai Putar</button>
+      <button id="stopOneBtn" disabled>Stop 1 (kanan)</button>
+      <button id="stopAllBtn" disabled>Stop Semua</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+    <div class="status" id="status">Tekan "Mulai Putar" untuk memulai undian</div>
+    <div class="result-box" id="resultBox"></div>
+  </div>
+
+  <div class="history">
+    <h3>Riwayat pemenang</h3>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">Belum ada hasil</div>
+    </div>
+    <button class="clear-history" id="clearHistoryBtn">Hapus semua riwayat</button>
+  </div>
+</div>
+
+<div id="modalContainer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+<script>
+  const NUM_REELS = 3;
+  const AUTO_INTERVAL_MS = 10000;
+  const TOTAL_MS = 30000;
+
+  const reelsContainer = document.getElementById('reels');
+  const startBtn = document.getElementById('startBtn');
+  const stopOneBtn = document.getElementById('stopOneBtn');
+  const stopAllBtn = document.getElementById('stopAllBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+  const statusEl = document.getElementById('status');
+  const resultBox = document.getElementById('resultBox');
+  const timerEl = document.getElementById('timer');
+  const historyListEl = document.getElementById('historyList');
+
+  let reelEls = [];
+  let spinIntervals = [];
+  let finalValues = new Array(NUM_REELS).fill(null);
+  let running = false;
+  let nextStopIndex = NUM_REELS - 1;
+  let autoTimeoutId = null;
+  let countdownIntervalId = null;
+  let remainingMs = TOTAL_MS;
+  let manualOverride = false;
+  let targetCombo = null;
+
+  const STORAGE_KEY = 'undian_kantor_history_v1';
+
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(freq, duration, type, volume) {
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(volume || 0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch (e) {}
+  }
+
+  function playTick() { playTone(320, 0.05, 'square', 0.05); }
+  function playLock() { playTone(720, 0.18, 'sine', 0.12); playTone(960, 0.12, 'sine', 0.08); }
+  function playFanfare() {
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((f, i) => {
+      setTimeout(() => playTone(f, 0.25, 'triangle', 0.1), i * 110);
+    });
+  }
+  function playCountdownBeep() { playTone(880, 0.08, 'sine', 0.07); }
+
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory(list) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function renderHistory() {
+    const list = loadHistory();
+    if (list.length === 0) {
+      historyListEl.innerHTML = '<div class="history-empty">Belum ada hasil</div>';
+      return;
+    }
+    historyListEl.innerHTML = '';
+    list.forEach((item, idx) => {
+      const el = document.createElement('div');
+      el.className = 'history-item';
+      const span = document.createElement('span');
+      span.textContent = item;
+      const delBtn = document.createElement('button');
+      delBtn.className = 'del-btn';
+      delBtn.setAttribute('aria-label', 'Hapus nomor ' + item);
+      delBtn.textContent = '\u2715';
+      delBtn.addEventListener('click', () => confirmDeleteOne(idx, item));
+      el.appendChild(span);
+      el.appendChild(delBtn);
+      historyListEl.appendChild(el);
+    });
+  }
+
+  function addToHistory(numberStr) {
+    const list = loadHistory();
+    list.push(numberStr);
+    saveHistory(list);
+    renderHistory();
+  }
+
+  function isDuplicate(numberStr) {
+    return loadHistory().includes(numberStr);
+  }
+
+  function deleteHistoryAt(idx) {
+    const list = loadHistory();
+    list.splice(idx, 1);
+    saveHistory(list);
+    renderHistory();
+  }
+
+  function confirmDeleteOne(idx, numberStr) {
+    const modalContainer = document.getElementById('modalContainer');
+    modalContainer.innerHTML =
+      '<div class="modal-overlay" id="modalOverlay">' +
+        '<div class="modal-box">' +
+          '<p>Apakah nomor <span class="modal-number">' + numberStr + '</span> ini hangus?</p>' +
+          '<div class="modal-btn-row">' +
+            '<button id="modalCancelBtn">Batal</button>' +
+            '<button id="modalConfirmBtn">Ya, hapus</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+      deleteHistoryAt(idx);
+      closeModal();
+    });
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') closeModal();
+    });
+  }
+
+  function closeModal() {
+    document.getElementById('modalContainer').innerHTML = '';
+  }
+
+  function secureRandomDigit(min, max) {
+    const range = max - min + 1;
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    return min + (arr[0] % range);
+  }
+
+  function randomDigitForReel(index) {
+    if (index === 0) return secureRandomDigit(0, 3);
+    return secureRandomDigit(0, 9);
+  }
+
+  function generateUniqueCombo() {
+    let attempt;
+    let guard = 0;
+    do {
+      attempt = [randomDigitForReel(0), randomDigitForReel(1), randomDigitForReel(2)].join('');
+      guard++;
+    } while (isDuplicate(attempt) && guard < 5000);
+    return attempt;
+  }
+
+  function buildReels() {
+    reelsContainer.innerHTML = '';
+    reelEls = [];
+    for (let i = 0; i < NUM_REELS; i++) {
+      const reel = document.createElement('div');
+      reel.className = 'reel';
+      reel.textContent = '0';
+      reel.id = 'reel-' + i;
+      reelsContainer.appendChild(reel);
+      reelEls.push(reel);
+    }
+  }
+
+  function formatTime(ms) {
+    const totalSec = Math.max(0, Math.ceil(ms / 1000));
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function startCountdownDisplay() {
+    const startTime = Date.now();
+    const initialRemaining = remainingMs;
+    clearInterval(countdownIntervalId);
+    countdownIntervalId = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const left = initialRemaining - elapsed;
+      timerEl.textContent = formatTime(left);
+      if (left <= 10000) timerEl.classList.add('warning');
+      if (Math.ceil(left / 1000) <= 5 && Math.ceil(left / 1000) > 0 && left % 1000 < 100) {
+        playCountdownBeep();
+      }
+      if (left <= 0) {
+        clearInterval(countdownIntervalId);
+      }
+    }, 100);
+  }
+
+  function startAllSpinning() {
+    running = true;
+    manualOverride = false;
+    finalValues = new Array(NUM_REELS).fill(null);
+    nextStopIndex = NUM_REELS - 1;
+    remainingMs = TOTAL_MS;
+    resultBox.innerHTML = '';
+    spinIntervals = [];
+    targetCombo = generateUniqueCombo();
+
+    for (let i = 0; i < NUM_REELS; i++) {
+      reelEls[i].classList.remove('locked');
+      reelEls[i].classList.add('spinning');
+      const min = 0;
+      const max = i === 0 ? 3 : 9;
+      const interval = setInterval(() => {
+        reelEls[i].textContent = secureRandomDigit(min, max);
+        playTick();
+      }, 55 + i * 4);
+      spinIntervals.push(interval);
+    }
+
+    startBtn.disabled = true;
+    stopOneBtn.disabled = false;
+    stopAllBtn.disabled = false;
+    resetBtn.disabled = true;
+    timerEl.classList.remove('warning');
+    statusEl.textContent = 'Semua digit sedang berputar...';
+
+    startCountdownDisplay();
+    scheduleNextAutoStop();
+  }
+
+  function scheduleNextAutoStop() {
+    clearTimeout(autoTimeoutId);
+    if (nextStopIndex < 0) return;
+    autoTimeoutId = setTimeout(() => {
+      if (!manualOverride) {
+        lockReel(nextStopIndex);
+        scheduleNextAutoStop();
+      }
+    }, AUTO_INTERVAL_MS);
+  }
+
+  function lockReel(idx) {
+    if (idx < 0 || finalValues[idx] !== null) return;
+    clearInterval(spinIntervals[idx]);
+
+    const digit = targetCombo[idx];
+    finalValues[idx] = digit;
+    reelEls[idx].textContent = digit;
+    reelEls[idx].classList.remove('spinning');
+    reelEls[idx].classList.add('locked');
+    playLock();
+
+    if (idx === nextStopIndex) nextStopIndex--;
+
+    if (finalValues.every(v => v !== null)) {
+      finishSequence();
+    } else {
+      statusEl.textContent = 'Digit ' + (idx + 1) + ' terkunci. Sisa ' + (nextStopIndex + 1) + ' digit...';
+    }
+  }
+
+  function stopNextReelManual() {
+    if (!running || nextStopIndex < 0) return;
+    manualOverride = true;
+    clearTimeout(autoTimeoutId);
+    lockReel(nextStopIndex);
+    if (nextStopIndex >= 0) scheduleNextAutoStop();
+  }
+
+  function stopAllManual() {
+    if (!running) return;
+    manualOverride = true;
+    clearTimeout(autoTimeoutId);
+    for (let i = NUM_REELS - 1; i >= 0; i--) {
+      lockReel(i);
+    }
+  }
+
+  function finishSequence() {
+    running = false;
+    clearTimeout(autoTimeoutId);
+    clearInterval(countdownIntervalId);
+    stopOneBtn.disabled = true;
+    stopAllBtn.disabled = true;
+    resetBtn.disabled = false;
+    timerEl.textContent = '00:00';
+    statusEl.textContent = 'Semua digit terkunci!';
+
+    const finalNumber = finalValues.join('');
+    const resultLine = document.createElement('div');
+    resultLine.className = 'final';
+    resultLine.textContent = 'HASIL: ' + finalNumber;
+    resultBox.appendChild(resultLine);
+
+    addToHistory(finalNumber);
+    playFanfare();
+    fireConfetti();
+  }
+
+  function fireConfetti() {
+    if (typeof confetti !== 'function') return;
+    const colors = ['#ffd54a', '#4a5a9e', '#7a9c5e', '#a9713f', '#fdf6e3'];
+    confetti({
+      particleCount: 140,
+      spread: 90,
+      startVelocity: 45,
+      origin: { y: 0.5 },
+      colors: colors,
+      zIndex: 1000
+    });
+    setTimeout(() => {
+      confetti({ particleCount: 60, angle: 60, spread: 70, origin: { x: 0, y: 0.6 }, colors: colors, zIndex: 1000 });
+      confetti({ particleCount: 60, angle: 120, spread: 70, origin: { x: 1, y: 0.6 }, colors: colors, zIndex: 1000 });
+    }, 200);
+  }
+
+  function resetMachine() {
+    running = false;
+    manualOverride = false;
+    clearTimeout(autoTimeoutId);
+    clearInterval(countdownIntervalId);
+    spinIntervals.forEach(iv => clearInterval(iv));
+    spinIntervals = [];
+    finalValues = new Array(NUM_REELS).fill(null);
+    nextStopIndex = NUM_REELS - 1;
+    remainingMs = TOTAL_MS;
+    reelEls.forEach((reel) => {
+      reel.classList.remove('spinning', 'locked');
+      reel.textContent = '0';
+    });
+    startBtn.disabled = false;
+    stopOneBtn.disabled = true;
+    stopAllBtn.disabled = true;
+    resetBtn.disabled = false;
+    timerEl.classList.remove('warning');
+    timerEl.textContent = '00:30';
+    statusEl.textContent = 'Tekan "Mulai Putar" untuk memulai undian';
+    resultBox.innerHTML = '';
+  }
+
+  function clearHistory() {
+    const list = loadHistory();
+    if (list.length === 0) return;
+    const modalContainer = document.getElementById('modalContainer');
+    modalContainer.innerHTML =
+      '<div class="modal-overlay" id="modalOverlay">' +
+        '<div class="modal-box">' +
+          '<p>Hapus <span class="modal-number">semua ' + list.length + ' riwayat</span> pemenang? Semua nomor akan hangus.</p>' +
+          '<div class="modal-btn-row">' +
+            '<button id="modalCancelBtn">Batal</button>' +
+            '<button id="modalConfirmBtn">Ya, hapus semua</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+    document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      renderHistory();
+      closeModal();
+    });
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') closeModal();
+    });
+  }
+
+  startBtn.addEventListener('click', () => { getAudioCtx(); startAllSpinning(); });
+  stopOneBtn.addEventListener('click', stopNextReelManual);
+  stopAllBtn.addEventListener('click', stopAllManual);
+  resetBtn.addEventListener('click', resetMachine);
+  clearHistoryBtn.addEventListener('click', clearHistory);
+
+  buildReels();
+  renderHistory();
+</script>
+
+</body>
+</html>
