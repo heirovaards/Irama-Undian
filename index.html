@@ -7,6 +7,14 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
     min-height: 100vh;
@@ -14,11 +22,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 24px;
     color: #2b2418;
     position: relative;
-    overflow: hidden;
   }
 
   .bg-scene {
@@ -93,7 +99,7 @@
     border-radius: 24px;
     padding: 28px 24px;
     box-shadow: 0 0 0 3px #5c3d1e, 0 0 40px rgba(0,0,0,0.25), 0 20px 50px rgba(0,0,0,0.3);
-    max-width: 560px;
+    max-width: 680px;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -114,23 +120,49 @@
 
   .reels {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     background: #2d3a5c;
     border-radius: 12px;
-    padding: 22px 16px;
+    padding: 18px 12px;
     box-shadow: inset 0 4px 12px rgba(0,0,0,0.4);
     justify-content: center;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .reel-static {
+    width: 56px;
+    height: 130px;
+    background: linear-gradient(180deg, #e8dcc0 0%, #d9c9a0 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: 700;
+    color: #5c3d1e;
+    box-shadow: inset 0 0 0 2px #a9713f, 0 2px 6px rgba(0,0,0,0.4);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  .reel-divider {
+    width: 2px;
+    height: 90px;
+    background: rgba(255,213,74,0.4);
+    flex-shrink: 0;
+    margin: 0 2px;
   }
 
   .reel {
-    width: 110px;
-    height: 150px;
+    width: 84px;
+    height: 130px;
     background: linear-gradient(180deg, #fdf6e3 0%, #f2e4bc 100%);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 76px;
+    font-size: 58px;
     font-weight: 700;
     color: #2b2418;
     box-shadow: inset 0 0 0 2px #a9713f, 0 2px 6px rgba(0,0,0,0.4);
@@ -196,6 +228,25 @@
     box-shadow: 0 4px 0 #b8901f;
   }
 
+  .start-btn-big {
+    display: block;
+    margin: 0 auto;
+    font-size: 22px;
+    padding: 20px 56px;
+    border-radius: 14px;
+    letter-spacing: 2px;
+    animation: startPulse 1.8s ease-in-out infinite;
+  }
+
+  .start-btn-big:disabled {
+    animation: none;
+  }
+
+  @keyframes startPulse {
+    0%, 100% { box-shadow: 0 4px 0 #b8901f, 0 0 0 0 rgba(255,213,74,0.5); }
+    50% { box-shadow: 0 4px 0 #b8901f, 0 0 0 10px rgba(255,213,74,0); }
+  }
+
   #stopOneBtn {
     background: linear-gradient(180deg, #5c6bb5 0%, #4a5a9e 100%);
     color: #fdf6e3;
@@ -256,10 +307,9 @@
 
   .history-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    max-height: 220px;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 320px;
     overflow-y: auto;
     padding: 4px;
   }
@@ -267,16 +317,29 @@
   .history-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     background: rgba(74,90,158,0.08);
     border: 2px solid rgba(122,156,94,0.5);
     border-radius: 10px;
-    padding: 10px 10px 10px 18px;
+    padding: 10px 10px 10px 16px;
+    width: 100%;
+  }
+
+  .history-item .seq {
+    font-size: 13px;
+    font-weight: 700;
+    color: #8a7a5f;
+    min-width: 34px;
+    flex-shrink: 0;
+  }
+
+  .history-item .code {
     font-size: 22px;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     color: #4a5a9e;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
+    flex: 1;
   }
 
   .history-item .del-btn {
@@ -289,6 +352,7 @@
     line-height: 1;
     cursor: pointer;
     letter-spacing: 0;
+    flex-shrink: 0;
   }
 
   .history-item .del-btn:hover { color: #b5471e; }
@@ -369,15 +433,28 @@
     letter-spacing: 0;
   }
 
+  @media (max-width: 720px) {
+    .reel { width: 68px; height: 110px; font-size: 46px; }
+    .reel-static { width: 46px; height: 110px; font-size: 30px; }
+    .reel-divider { height: 78px; }
+    .reels { gap: 6px; padding: 16px 10px; }
+    #numberReels { gap: 6px !important; }
+  }
+
   @media (max-width: 500px) {
-    .reel { width: 78px; height: 108px; font-size: 52px; }
-    .reels { gap: 10px; padding: 16px 10px; }
+    .reel { width: 60px; height: 100px; font-size: 40px; }
+    .reel-static { width: 38px; height: 100px; font-size: 26px; }
+    .reel-divider { height: 70px; }
+    .reels { gap: 6px; padding: 14px 8px; }
+    #numberReels { gap: 8px !important; }
     .indorama-title { font-size: 28px; letter-spacing: 2px; }
     .wood-sign .fg-line { font-size: 18px; }
     .wood-sign { padding: 10px 20px; }
     .timer { font-size: 32px; }
     button { padding: 11px 16px; font-size: 13px; }
-    .history-item { font-size: 18px; letter-spacing: 2px; padding: 8px 8px 8px 14px; }
+    .history-item .code { font-size: 18px; letter-spacing: 2px; }
+    .history-item { padding: 8px 8px 8px 12px; }
+    .start-btn-big { font-size: 17px; padding: 16px 36px; width: 100%; }
   }
 </style>
 </head>
@@ -406,18 +483,24 @@
   <div class="indorama-title">INDORAMA</div>
   <div class="wood-sign">
     <div class="fg-line">FAMILY GATHERING 2026</div>
-    <div class="sub-line">UNDIAN DOOR PRIZE &middot; NOMOR 001&ndash;250</div>
   </div>
 </div>
 
 <div class="machine">
   <div class="timer" id="timer">00:30</div>
 
-  <div class="reels" id="reels"></div>
+  <div class="reels" id="reels">
+    <div class="reel-static">I</div>
+    <div class="reel-static">F</div>
+    <div class="reel-static">G</div>
+    <div class="reel-static">T</div>
+    <div class="reel-divider"></div>
+    <div id="numberReels" style="display: flex; gap: 16px;"></div>
+  </div>
 
   <div class="controls">
+    <button id="startBtn" class="start-btn-big">Mulai Putar</button>
     <div class="btn-row">
-      <button id="startBtn">Mulai Putar</button>
       <button id="stopOneBtn" disabled>Stop 1 (kanan)</button>
       <button id="stopAllBtn" disabled>Stop Semua</button>
       <button id="resetBtn">Reset</button>
@@ -443,7 +526,7 @@
   const AUTO_INTERVAL_MS = 10000;
   const TOTAL_MS = 30000;
 
-  const reelsContainer = document.getElementById('reels');
+  const reelsContainer = document.getElementById('numberReels');
   const startBtn = document.getElementById('startBtn');
   const stopOneBtn = document.getElementById('stopOneBtn');
   const stopAllBtn = document.getElementById('stopAllBtn');
@@ -520,20 +603,32 @@
       return;
     }
     historyListEl.innerHTML = '';
-    list.forEach((item, idx) => {
+    const total = list.length;
+    for (let i = total - 1; i >= 0; i--) {
+      const item = list[i];
+      const displayIdx = i + 1;
       const el = document.createElement('div');
       el.className = 'history-item';
-      const span = document.createElement('span');
-      span.textContent = item;
+
+      const seq = document.createElement('span');
+      seq.className = 'seq';
+      seq.textContent = '#' + displayIdx;
+
+      const code = document.createElement('span');
+      code.className = 'code';
+      code.textContent = 'IFGT' + item;
+
       const delBtn = document.createElement('button');
       delBtn.className = 'del-btn';
-      delBtn.setAttribute('aria-label', 'Hapus nomor ' + item);
+      delBtn.setAttribute('aria-label', 'Hapus nomor IFGT' + item);
       delBtn.textContent = '\u2715';
-      delBtn.addEventListener('click', () => confirmDeleteOne(idx, item));
-      el.appendChild(span);
+      delBtn.addEventListener('click', () => confirmDeleteOne(i, item));
+
+      el.appendChild(seq);
+      el.appendChild(code);
       el.appendChild(delBtn);
       historyListEl.appendChild(el);
-    });
+    }
   }
 
   function addToHistory(numberStr) {
@@ -559,7 +654,7 @@
     modalContainer.innerHTML =
       '<div class="modal-overlay" id="modalOverlay">' +
         '<div class="modal-box">' +
-          '<p>Apakah nomor <span class="modal-number">' + numberStr + '</span> ini hangus?</p>' +
+          '<p>Apakah nomor <span class="modal-number">IFGT' + numberStr + '</span> ini hangus?</p>' +
           '<div class="modal-btn-row">' +
             '<button id="modalCancelBtn">Batal</button>' +
             '<button id="modalConfirmBtn">Ya, hapus</button>' +
@@ -744,7 +839,7 @@
     const finalNumber = finalValues.join('');
     const resultLine = document.createElement('div');
     resultLine.className = 'final';
-    resultLine.textContent = 'HASIL: ' + finalNumber;
+    resultLine.textContent = 'HASIL: IFGT' + finalNumber;
     resultBox.appendChild(resultLine);
 
     addToHistory(finalNumber);
